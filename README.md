@@ -31,7 +31,7 @@ Retorna um array com todos os games cadastrados.
         "id": 1,
         "titulo": "Minecraft",
         "preco" : "R$150,00",
-        "descricao: "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática",
+        "descricao": "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática",
 
     }
 ]
@@ -67,7 +67,7 @@ Cria um novo game com os dados enviados no corpo da requisição
 {
     "titulo": "Minecraft",
     "preco" : "R$150,00",
-    "descricao: "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
+    "descricao": "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
 }
 ```
 
@@ -79,7 +79,7 @@ Cria um novo game com os dados enviados no corpo da requisição
     "id": 1,
     "titulo": "Minecraft",
     "preco" : "R$150,00",
-    "descricao: "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
+    "descricao": "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
 }
 
 
@@ -112,7 +112,7 @@ informado como parâmetro de path.
     "id": 1,
     "titulo": "Minecraft",
     "preco" : "R$150,00",
-    "descricao: "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
+    "descricao": "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
 }
 
 
@@ -167,7 +167,7 @@ utilizando as informações enviadas no corpo da requisição.
 {
     "titulo": "Minecraft",
     "preco" : "R$150,00",
-    "descricao: "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
+    "descricao": "Minecraft é um jogo em que você constrói coisas com blocos, em um mundo virtual aberto e livre para explorar. É o que os gamers chamam de 'sandbox', porque funciona mesmo como uma caixa de areia, em que o único limite para o jogador é a própria imaginação e a prática"
 }
 ```
 
