@@ -132,18 +132,17 @@ informado como parâmetro de path.
 
 ### Apagar PS-game
 
-`DELETE` /ps-games/`{id}`
+`DELETE` /ps-games/{id}
 
-Apaga o game com o `id` especificado no parâmetro de path.
-
+Apaga o jogo com o ID especificado no parâmetro de path.
 
 #### Códigos de Status
 
-|código|descrição|
-|------|---------|
-|204|Game foi apagado com sucesso
-|401|Acesso negado. Você deve se autenticar
-|404|Não existe game com o `id` informado.
+| Código | Descrição                                    |
+| ------ | -------------------------------------------- |
+| 204    | Game foi apagado com sucesso                 |
+| 401    | Acesso negado. Você deve se autenticar      |
+| 404    | Não existe game com o ID informado.          |
 
 ---
 
