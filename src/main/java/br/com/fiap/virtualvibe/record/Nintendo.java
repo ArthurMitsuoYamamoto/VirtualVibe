@@ -4,7 +4,7 @@ import java.util.Random;
 
 public record Nintendo(Long id, String titulo, Number preco, String descricao) {
     public Nintendo(Long id, String titulo, Number preco, String descricao){
-       this.id  = Math.abs (new Random().nextLong());
+       this.id  = (id == null)? Math.abs (new Random().nextLong()) : id;
        this.titulo = titulo;
        this.preco = preco;
        this.descricao = descricao;

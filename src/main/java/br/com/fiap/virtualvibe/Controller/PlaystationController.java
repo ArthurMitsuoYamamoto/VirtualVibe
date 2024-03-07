@@ -2,6 +2,7 @@ package br.com.fiap.virtualvibe.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,36 +43,129 @@ public class PlaystationController {
     @GetMapping("{id}")
     public ResponseEntity<Playstation> show(@PathVariable Long id){
         log.info("buscando game com id {}", id);
-        
-        for(Playstation gamePlaystation: repository){
-            if (gamePlaystation.id().equals(id))
-                return ResponseEntity.status(HttpStatus.OK).body(gamePlaystation);
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @PutMapping("{id}")
-    public ResponseEntity<Playstation> update(@PathVariable Long id, @RequestBody Playstation updatedGame) {
-        for (int i = 0; i <= repository.size(); i++) {
-            if (repository.get(i).id().equals(id)) {
-                repository.set(i, updatedGame);
-                return ResponseEntity.status(HttpStatus.OK).body(updatedGame);
-            }
-        }
+        var gameEncontrado = getGameById(id);
+                                    
+            if(gameEncontrado.isEmpty())
+                return ResponseEntity.notFound().build();
+    
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Object> destroy(@PathVariable long id){
+        log.info("apagando playstation game", id);
 
-         for(Playstation gamePlaystation : repository){
-            if(gamePlaystation.id().equals(id)){
-                repository.remove(gamePlaystation);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-        }
+        var gameEncontrado = getGameById(id);
+        if(gameEncontrado.isEmpty())
+            return ResponseEntity.notFound().build();
+    
+            repository.remove(gameEncontrado.get());
+           
+            return ResponseEntity.noContent().build();
+
         
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Playstation> update(@PathVariable long id, @RequestBody Playstation gamePlaystation){
+        log.info("atualizando game {} para {}", id, gamePlaystation);
+        var gameEncontrado = getGameById(id);
+
+        if (gameEncontrado.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        var gameAntigo = gameEncontrado.get();
+
+        var gameNovo = new Playstation(id, gamePlaystation.titulo(), gamePlaystation.preco(), gamePlaystation.descricao());
+        
+        repository.remove(gameAntigo);
+
+        repository.add(gameNovo);
+        
+        return ResponseEntity.ok(gameNovo);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private Optional<Playstation> getGameById(long id) {
+        var gameEncontrado = repository
+        .stream()
+        .filter(g->!g.id().equals(id))
+        .findFirst();
+        return gameEncontrado;
+    }
+    
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //update old version
+    // @PutMapping("{id}")
+    // public ResponseEntity<Playstation> update(@PathVariable Long id, @RequestBody Playstation updatedGame) {
+    //     for (int i = 0; i <= repository.size(); i++) {
+    //         if (repository.get(i).id().equals(id)) {
+    //             repository.set(i, updatedGame);
+    //             return ResponseEntity.status(HttpStatus.OK).body(updatedGame);
+    //         }
+    //     }
+    //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
+    
+    
+   
+   
+    // @DeleteMapping("{id}")
+    // public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+    //      for(Playstation gamePlaystation : repository){
+    //         if(gamePlaystation.id().equals(id)){
+    //             repository.remove(gamePlaystation);
+    //             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    //         }
+    //     }
+        
+    //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
 }
+
+
+
+    //procurar id especifico -- old version
+    // for(Playstation gamePlaystation: repository){
+        //     if (gamePlaystation.id().equals(id))
+        //         return ResponseEntity.status(HttpStatus.OK).body(gamePlaystation);
+        // }
+        // todo refatorar com stream
+
+
+
+
+        // @DeleteMapping("{id}")
+    // public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+    //      for(Playstation gamePlaystation : repository){
+    //         if(gamePlaystation.id().equals(id)){
+    //             repository.remove(gamePlaystation);
+    //             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    //         }
+    //     }
+        
+    //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
