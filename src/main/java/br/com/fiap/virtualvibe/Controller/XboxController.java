@@ -1,7 +1,6 @@
-package br.com.fiap.virtualvibe.Controller;
+package br.com.fiap.virtualvibe.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,18 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.virtualvibe.model.Xbox;
+import br.com.fiap.virtualvibe.record.Xbox;
+
 
 @RestController
 @RequestMapping("xbox-games")
 public class XboxController {
     
-    Logger log = LoggerFactory.getLogger(getClass());
+     Logger log = LoggerFactory.getLogger(getClass());
 
-    List<Xbox> repository = new ArrayList<>();
+     List<Xbox> repository = new ArrayList<>();
 
-    @GetMapping  
-    public List<Xbox> index(){
+     @GetMapping  
+     public List<Xbox> index(){
         return repository;
     }
 
@@ -36,16 +36,16 @@ public class XboxController {
     public ResponseEntity<Xbox> create(@RequestBody Xbox gameXbox){ //binding
         log.info("Cadastrando game {}", gameXbox);
         repository.add(gameXbox);
-        return ResponseEntity.status(HttpStatus.CREATED).body(gameXbox);}
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameXbox);
+    }
     
-
     @GetMapping("{id}")
     public ResponseEntity<Xbox> show(@PathVariable Long id){
         log.info("buscando game com id {}", id);
         
         for(Xbox gameXbox: repository){
             if (gameXbox.id().equals(id))
-            return ResponseEntity.status(HttpStatus.OK).body(gameXbox);
+                return ResponseEntity.status(HttpStatus.OK).body(gameXbox);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -53,28 +53,25 @@ public class XboxController {
 
     @PutMapping("{id}")
     public ResponseEntity<Xbox> update(@PathVariable Long id, @RequestBody Xbox updatedGame) {
-        for (int i = 0; i < repository.size(); i++) {
-            Xbox gameXbox = repository.get(i);
-            if (gameXbox.id().equals(id)) {
-                updatedGame = new Xbox(id, updatedGame.titulo(), updatedGame.preco(), updatedGame.descricao());
+        for (int i = 0; i <= repository.size(); i++) {
+            if (repository.get(i).id().equals(id)) {
                 repository.set(i, updatedGame);
-                return ResponseEntity.ok(updatedGame);
+                return ResponseEntity.status(HttpStatus.OK).body(updatedGame);
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Iterator<Xbox> iterator = repository.iterator();
-        while (iterator.hasNext()) {
-            Xbox gameXbox = iterator.next();
-            if (gameXbox.id().equals(id)) {
-                iterator.remove();
+
+         for(Xbox gameXbox : repository){
+            if(gameXbox.id().equals(id)){
+                repository.remove(gameXbox);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         }
+        
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

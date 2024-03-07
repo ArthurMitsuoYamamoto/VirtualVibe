@@ -1,7 +1,6 @@
-package br.com.fiap.virtualvibe.Controller;
+package br.com.fiap.virtualvibe.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.virtualvibe.model.Nintendo;
+import br.com.fiap.virtualvibe.record.Nintendo;
 
 
 @RestController
@@ -54,12 +53,10 @@ public class NintendoController {
 
     @PutMapping("{id}")
     public ResponseEntity<Nintendo> update(@PathVariable Long id, @RequestBody Nintendo updatedGame) {
-        for (int i = 0; i < repository.size(); i++) {
-            Nintendo gameNintendo = repository.get(i);
-            if (gameNintendo.id().equals(id)) {
-                updatedGame = new Nintendo(id, updatedGame.titulo(), updatedGame.preco(), updatedGame.descricao());
+        for (int i = 0; i <= repository.size(); i++) {
+            if (repository.get(i).id().equals(id)) {
                 repository.set(i, updatedGame);
-                return ResponseEntity.ok(updatedGame);
+                return ResponseEntity.status(HttpStatus.OK).body(updatedGame);
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -67,11 +64,10 @@ public class NintendoController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Iterator<Nintendo> iterator = repository.iterator();
-        while (iterator.hasNext()) {
-            Nintendo gameNintendo = iterator.next();
-            if (gameNintendo.id().equals(id)) {
-                iterator.remove();
+
+         for(Nintendo game : repository){
+            if(game.id().equals(id)){
+                repository.remove(game);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         }
@@ -79,4 +75,3 @@ public class NintendoController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
-

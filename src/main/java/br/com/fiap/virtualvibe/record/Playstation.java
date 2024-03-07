@@ -1,4 +1,4 @@
-package br.com.fiap.virtualvibe.model;
+package br.com.fiap.virtualvibe.record;
 
 import java.util.Random;
 
