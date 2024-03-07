@@ -11,7 +11,7 @@ public record Playstation(Long id, String titulo, Number preco, String descricao
     }
 }
     
-//imutável - record
+//Imutável - record
 
     
 

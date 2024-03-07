@@ -11,4 +11,4 @@ public record Xbox(Long id, String titulo, Number preco, String descricao) {
    }
 }
 
-//imutável - record
+//Imutável - record
