@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.virtualvibe.record.Playstation;
+import br.com.fiap.virtualvibe.model.Playstation;
+
+import br.com.fiap.virtualvibe.record.PlaystationRecord;
+import br.com.fiap.virtualvibe.repository.PlaystationRepository;
 
 
 @RestController
@@ -26,30 +31,36 @@ public class PlaystationController {
     
      Logger log = LoggerFactory.getLogger(getClass());
 
-     List<Playstation> repository = new ArrayList<>();
+     List<PlaystationRecord> repository = new ArrayList<>();
+
+
+      @Autowired // Injeção de Dependência - Inversão de Controle
+     PlaystationRepository playstationRepository;
 
      @GetMapping  
      public List<Playstation> index(){
-        return repository;
+        return playstationRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     @PostMapping
-    public ResponseEntity<Playstation> create(@RequestBody Playstation gamePlaystation){ //binding
+    @ResponseStatus(HttpStatus.CREATED)
+    public Playstation create(@RequestBody Playstation gamePlaystation){ //binding
         log.info("Cadastrando game {}", gamePlaystation);
-        repository.add(gamePlaystation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(gamePlaystation);
+        return playstationRepository.save(gamePlaystation);
+      
     }
     
+    @SuppressWarnings("null")
     @GetMapping("{id}")
     public ResponseEntity<Playstation> show(@PathVariable Long id){
         log.info("buscando game com id {}", id);
-        var gameEncontrado = getGameById(id);
-                                    
-            if(gameEncontrado.isEmpty())
-                return ResponseEntity.notFound().build();
-    
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+        return playstationRepository
+        .findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+}
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> destroy(@PathVariable long id){
@@ -67,7 +78,7 @@ public class PlaystationController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Playstation> update(@PathVariable long id, @RequestBody Playstation gamePlaystation){
+    public ResponseEntity<PlaystationRecord> update(@PathVariable long id, @RequestBody PlaystationRecord gamePlaystation){
         log.info("atualizando game {} para {}", id, gamePlaystation);
         var gameEncontrado = getGameById(id);
 
@@ -76,7 +87,7 @@ public class PlaystationController {
 
         var gameAntigo = gameEncontrado.get();
 
-        var gameNovo = new Playstation(id, gamePlaystation.titulo(), gamePlaystation.preco(), gamePlaystation.descricao());
+        var gameNovo = new PlaystationRecord(id, gamePlaystation.titulo(), gamePlaystation.preco(), gamePlaystation.descricao());
         
         repository.remove(gameAntigo);
 
@@ -97,7 +108,7 @@ public class PlaystationController {
     
     
     
-    private Optional<Playstation> getGameById(long id) {
+    private Optional<PlaystationRecord> getGameById(long id) {
         var gameEncontrado = repository
         .stream()
         .filter(g->!g.id().equals(id))

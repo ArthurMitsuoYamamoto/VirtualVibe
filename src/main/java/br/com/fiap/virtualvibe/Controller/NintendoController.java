@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.virtualvibe.record.Nintendo;
+import br.com.fiap.virtualvibe.record.NintendoRecord;
 
 
 @RestController
@@ -25,25 +25,25 @@ public class NintendoController {
     
      Logger log = LoggerFactory.getLogger(getClass());
 
-     List<Nintendo> repository = new ArrayList<>();
+     List<NintendoRecord> repository = new ArrayList<>();
 
      @GetMapping  
-     public List<Nintendo> index(){
+     public List<NintendoRecord> index(){
         return repository;
     }
 
     @PostMapping
-    public ResponseEntity<Nintendo> create(@RequestBody Nintendo gameNintendo){ //binding
+    public ResponseEntity<NintendoRecord> create(@RequestBody NintendoRecord gameNintendo){ //binding
         log.info("Cadastrando game {}", gameNintendo);
         repository.add(gameNintendo);
         return ResponseEntity.status(HttpStatus.CREATED).body(gameNintendo);
     }
     
     @GetMapping("{id}")
-    public ResponseEntity<Nintendo> show(@PathVariable Long id){
+    public ResponseEntity<NintendoRecord> show(@PathVariable Long id){
         log.info("buscando game com id {}", id);
         
-        for(Nintendo gameNintendo: repository){
+        for(NintendoRecord gameNintendo: repository){
             if (gameNintendo.id().equals(id))
                 return ResponseEntity.status(HttpStatus.OK).body(gameNintendo);
         }
@@ -52,7 +52,7 @@ public class NintendoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Nintendo> update(@PathVariable Long id, @RequestBody Nintendo updatedGame) {
+    public ResponseEntity<NintendoRecord> update(@PathVariable Long id, @RequestBody NintendoRecord updatedGame) {
         for (int i = 0; i <= repository.size(); i++) {
             if (repository.get(i).id().equals(id)) {
                 repository.set(i, updatedGame);
@@ -65,7 +65,7 @@ public class NintendoController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-         for(Nintendo game : repository){
+         for(NintendoRecord game : repository){
             if(game.id().equals(id)){
                 repository.remove(game);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
