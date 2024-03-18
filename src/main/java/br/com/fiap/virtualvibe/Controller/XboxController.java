@@ -1,7 +1,7 @@
 package br.com.fiap.virtualvibe.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import br.com.fiap.virtualvibe.model.Xbox;
 import br.com.fiap.virtualvibe.repository.XboxRepository;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.virtualvibe.record.XboxRecord;
@@ -29,71 +28,73 @@ public class XboxController {
     
      Logger log = LoggerFactory.getLogger(getClass());
 
-     //List<XboxRecord> repository = new ArrayList<>();
-
-     @Autowired // Injeção de Dependência - Inversão de Controle
+     @Autowired
      XboxRepository xboxRepository;
 
      @GetMapping  
      public List<Xbox> index(){
+         log.info("[XBOX] Buscando todos os jogos");
+
         return xboxRepository.findAll();
     }
 
-    
-    @SuppressWarnings("null")
     @PostMapping
-   @ResponseStatus(HttpStatus.CREATED)
-     public Xbox create(@RequestBody Xbox gameXbox) {
-        log.info("Cadastrando gameXbox {}", gameXbox);
-       return xboxRepository.save(gameXbox);
-     }
+    public ResponseEntity<Xbox> create(@RequestBody XboxRecord gameXboxRecord){ //binding
+        log.info("[XBOX] Cadastrando jogo {}", gameXboxRecord);
 
-   // @PostMapping
-    // public ResponseEntity<Xbox> create(@RequestBody XboxRecord gameXboxRecord){ //binding
-     //    log.info("Cadastrando game {}", gameXboxRecord);
+        Xbox game = Xbox.builder()
+                .titulo(gameXboxRecord.titulo())
+                .preco(gameXboxRecord.preco())
+                .descricao(gameXboxRecord.descricao())
+                .build();
 
-       //  Xbox game = Xbox.builder()
-         //        .titulo(gameXboxRecord.titulo())
-          //       .preco(gameXboxRecord.preco())
-          //       .descricao(gameXboxRecord.descricao())
-           //      .build();
-
-        // Xbox savedGame = xboxRepository.save(game);
-        // return ResponseEntity.status(HttpStatus.CREATED).body(savedGame);
-    // }
+        Xbox savedGame = xboxRepository.save(game);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedGame);
+    }
     
-    @SuppressWarnings("null")
     @GetMapping("{id}")
-    public ResponseEntity<Xbox> show(@PathVariable Long id) {
-        log.info("buscando gameXbox com id {}", id);
-        
-        return xboxRepository
-                .findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Xbox> show(@PathVariable Long id){
+        log.info("[XBOX] Buscando game com id {}", id);
+
+        Optional<Xbox> gameOpt = xboxRepository.findById(id);
+
+        if(gameOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(gameOpt.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<XboxRecord> update(@PathVariable Long id, @RequestBody XboxRecord updatedGame) {
-        for (int i = 0; i <= repository.size(); i++) {
-            if (repository.get(i).id().equals(id)) {
-                repository.set(i, updatedGame);
-                return ResponseEntity.status(HttpStatus.OK).body(updatedGame);
-            }
+    public ResponseEntity<Xbox> update(@PathVariable Long id, @RequestBody XboxRecord updatedGame) {
+        log.info("[XBOX] Atualizando game com id {}", id);
+
+        Optional<Xbox> gameOpt = xboxRepository.findById(id);
+
+        if(gameOpt.isPresent()){
+
+            Xbox xbox = gameOpt.get();
+            xbox.setTitulo(updatedGame.titulo());
+            xbox.setPreco(updatedGame.preco());
+            xbox.setDescricao(updatedGame.descricao());
+
+            return ResponseEntity.status(HttpStatus.OK).body(xboxRepository.save(xbox));
         }
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("[XBOX] Deletando game com id {}", id);
 
-         for(XboxRecord gameXboxRecord : repository){
-            if(gameXboxRecord.id().equals(id)){
-                repository.remove(gameXboxRecord);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
+        Optional<Xbox> xboxGame = xboxRepository.findById(id);
+
+        if(xboxGame.isPresent()){
+            xboxRepository.delete(xboxGame.get());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
