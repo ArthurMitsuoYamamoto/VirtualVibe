@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "797edfd4-3604-4936-b831-43b8f35770a2",
+		"name": "VirtualVibe API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19411892"
+	},
+	"item": [
+		{
+			"name": "Games",
+			"item": [
+				{
+					"name": "All games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}/{{NINTENDO_URI}}",
+							"host": [
+								"{{LOCALHOST}}"
+							],
+							"path": [
+								"{{NINTENDO_URI}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save game",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\" : \"Spider Man: Miles Morales\",\r\n    \"preco\" : 190,\r\n    \"descricao\" : \"Fight against villains with Miles Morales.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}/{{NINTENDO_URI}}",
+							"host": [
+								"{{LOCALHOST}}"
+							],
+							"path": [
+								"{{NINTENDO_URI}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update game",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\" : \"Patapon 3\",\r\n    \"preco\" : 60,\r\n    \"descricao\" : \"Make fight with music.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}/{{NINTENDO_URI}}/1",
+							"host": [
+								"{{LOCALHOST}}"
+							],
+							"path": [
+								"{{NINTENDO_URI}}",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete game",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}/{{NINTENDO_URI}}/2",
+							"host": [
+								"{{LOCALHOST}}"
+							],
+							"path": [
+								"{{NINTENDO_URI}}",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Game by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}/{{NINTENDO_URI}}/2",
+							"host": [
+								"{{LOCALHOST}}"
+							],
+							"path": [
+								"{{NINTENDO_URI}}",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCALHOST",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "PLAYSTATION_URI",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "NINTENDO_URI",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "XBOX_URI\n",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

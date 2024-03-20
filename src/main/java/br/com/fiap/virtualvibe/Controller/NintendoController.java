@@ -1,100 +1,71 @@
 package br.com.fiap.virtualvibe.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import br.com.fiap.virtualvibe.model.Nintendo;
 import br.com.fiap.virtualvibe.repository.NintendoRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.fiap.virtualvibe.record.NintendoRecord;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
 @RequestMapping("nintendo-games")
+@Slf4j
 public class NintendoController {
     
-     Logger log = LoggerFactory.getLogger(getClass());
-
     @Autowired
     NintendoRepository nintendoRepository;
 
     @GetMapping
     public List<Nintendo> index() {
         log.info("[NINTENDO] Buscando todos os jogos");
-
         return nintendoRepository.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<Nintendo> create(@RequestBody NintendoRecord gameNintendoRecord) { //binding
-        log.info("[NINTENDO] Cadastrando jogo {}", gameNintendoRecord);
-
-        Nintendo game = Nintendo.builder()
-                .titulo(gameNintendoRecord.titulo())
-                .preco(gameNintendoRecord.preco())
-                .descricao(gameNintendoRecord.descricao())
-                .build();
-
-        Nintendo savedGame = nintendoRepository.save(game);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedGame);
+    @ResponseStatus(CREATED)
+    public Nintendo create(@RequestBody @Valid Nintendo gameNintendo) { //binding
+        log.info("[NINTENDO] Cadastrando jogo {}", gameNintendo);
+        return nintendoRepository.save(gameNintendo);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Nintendo> show(@PathVariable Long id) {
         log.info("[NINTENDO] Buscando game com id {}", id);
 
-        Optional<Nintendo> gameOpt = nintendoRepository.findById(id);
-
-        if (gameOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(gameOpt.get());
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return nintendoRepository
+                .findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Nintendo> update(@PathVariable Long id, @RequestBody NintendoRecord updatedGame) {
+    public Nintendo update(@PathVariable Long id, @RequestBody Nintendo updatedGame) {
         log.info("[NINTENDO] Atualizando game com id {}", id);
-
-        Optional<Nintendo> gameOpt = nintendoRepository.findById(id);
-
-        if (gameOpt.isPresent()) {
-
-            Nintendo nintendo = gameOpt.get();
-            nintendo.setTitulo(updatedGame.titulo());
-            nintendo.setPreco(updatedGame.preco());
-            nintendo.setDescricao(updatedGame.descricao());
-
-            return ResponseEntity.status(HttpStatus.OK).body(nintendoRepository.save(nintendo));
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        verificarSeJogoExiste(id);
+        return nintendoRepository.save(updatedGame);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         log.info("[NINTENDO] Deletando game com id {}", id);
+        verificarSeJogoExiste(id);
+        nintendoRepository.deleteById(id);
+    }
 
-        Optional<Nintendo> nintendoGame = nintendoRepository.findById(id);
-
-        if (nintendoGame.isPresent()) {
-            nintendoRepository.delete(nintendoGame.get());
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    private void verificarSeJogoExiste(Long id) {
+        nintendoRepository
+            .findById(id)
+            .orElseThrow(()-> new ResponseStatusException(
+                    NOT_FOUND, "Não existe jogo com o id informado."
+            ));
     }
 }

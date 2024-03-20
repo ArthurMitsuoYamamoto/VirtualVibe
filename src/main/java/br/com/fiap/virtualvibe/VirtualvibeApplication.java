@@ -10,8 +10,4 @@ public class VirtualvibeApplication {
 		SpringApplication.run(VirtualvibeApplication.class, args);
 	}
 
-
-
-
-
 }
