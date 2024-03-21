@@ -29,6 +29,7 @@ public class NintendoController {
         return nintendoRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     @PostMapping
     @ResponseStatus(CREATED)
     public Nintendo create(@RequestBody @Valid Nintendo gameNintendo) { //binding
@@ -36,6 +37,7 @@ public class NintendoController {
         return nintendoRepository.save(gameNintendo);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("{id}")
     public ResponseEntity<Nintendo> show(@PathVariable Long id) {
         log.info("[NINTENDO] Buscando game com id {}", id);
@@ -46,6 +48,7 @@ public class NintendoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SuppressWarnings("null")
     @PutMapping("{id}")
     public Nintendo update(@PathVariable Long id, @RequestBody Nintendo updatedGame) {
         log.info("[NINTENDO] Atualizando game com id {}", id);
@@ -53,6 +56,7 @@ public class NintendoController {
         return nintendoRepository.save(updatedGame);
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -61,6 +65,7 @@ public class NintendoController {
         nintendoRepository.deleteById(id);
     }
 
+    @SuppressWarnings("null")
     private void verificarSeJogoExiste(Long id) {
         nintendoRepository
             .findById(id)

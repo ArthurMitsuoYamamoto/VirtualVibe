@@ -29,6 +29,7 @@ public class PlaystationController {
         return playstationRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     @PostMapping
     @ResponseStatus(CREATED)
     public Playstation create(@RequestBody @Valid Playstation gamePlaystation) { //binding
@@ -36,6 +37,7 @@ public class PlaystationController {
         return playstationRepository.save(gamePlaystation);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("{id}")
     public ResponseEntity<Playstation> show(@PathVariable Long id) {
         log.info("[PLAYSTATION] Buscando game com id {}", id);
@@ -46,6 +48,7 @@ public class PlaystationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SuppressWarnings("null")
     @PutMapping("{id}")
     public Playstation update(@PathVariable Long id, @RequestBody Playstation updatedGame) {
         log.info("[PLAYSTATION] Atualizando game com id {}", id);
@@ -53,6 +56,7 @@ public class PlaystationController {
         return playstationRepository.save(updatedGame);
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -61,6 +65,7 @@ public class PlaystationController {
         playstationRepository.deleteById(id);
     }
 
+    @SuppressWarnings("null")
     private void verificarSeJogoExiste(Long id) {
         playstationRepository
             .findById(id)
