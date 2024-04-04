@@ -1,4 +1,4 @@
-package br.com.fiap.virtualvibe.controller;
+package br.com.fiap.virtualvibe.Controller;
 
 import java.util.List;
 
