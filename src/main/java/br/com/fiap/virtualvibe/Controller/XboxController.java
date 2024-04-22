@@ -1,4 +1,4 @@
-package br.com.fiap.virtualvibe.controller;
+package br.com.fiap.virtualvibe.Controller;
 
 import java.util.List;
 
@@ -29,6 +29,7 @@ public class XboxController {
         return xboxRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     @PostMapping
     @ResponseStatus(CREATED)
     public Xbox create(@RequestBody @Valid Xbox gameXbox) { //binding
@@ -36,6 +37,7 @@ public class XboxController {
         return xboxRepository.save(gameXbox);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("{id}")
     public ResponseEntity<Xbox> show(@PathVariable Long id) {
         log.info("[Xbox] Buscando game com id {}", id);
@@ -46,6 +48,7 @@ public class XboxController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SuppressWarnings("null")
     @PutMapping("{id}")
     public Xbox update(@PathVariable Long id, @RequestBody Xbox updatedGame) {
         log.info("[Xbox] Atualizando game com id {}", id);
@@ -53,6 +56,7 @@ public class XboxController {
         return xboxRepository.save(updatedGame);
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -61,6 +65,7 @@ public class XboxController {
         xboxRepository.deleteById(id);
     }
 
+    @SuppressWarnings("null")
     private void verificarSeJogoExiste(Long id) {
         xboxRepository
             .findById(id)
